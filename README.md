@@ -1,0 +1,2 @@
+# scenic_tourism_information_management_platform
+.ui文件为各个界面设计
