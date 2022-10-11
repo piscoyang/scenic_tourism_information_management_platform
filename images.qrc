@@ -1,0 +1,4 @@
+<RCC>
+    <qresource prefix="/scenic"/>
+    <qresource prefix="/scenic" lang="English"/>
+</RCC>
