@@ -7,14 +7,17 @@
 #include <algorithm>
 #include <QSqlQuery>
 #include <QDebug>
+
 Scenicmanagement::Scenicmanagement(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Scenicmanagement)
 {
-
+    QString mapPath=QCoreApplication::applicationDirPath()+"/scenic.My_map";
+    mapPath.replace(QString("/"),QString("\\"));
     ui->setupUi(this);
     setWindowTitle("景区景点、道路管理");
-    loadfile("F:/source/scenic_tourism_information_management_platform/scenic.My_map");
+
+    loadfile(mapPath);
     QPalette palette(this->palette());
     palette.setColor(QPalette::Background, QColor("lightyellow"));
     this->setAutoFillBackground(true);
@@ -56,7 +59,8 @@ QPoint temp_Point_1, temp_Point_2;  // 两个临时的点
 
 const int RADIUS = 5;               // 点击半径
 int function_num = 0;               // 功能号(针对不同的操作会产生不同的效果)
-QString pic_path="F:/source/scenic_tourism_information_management_platform/世界之窗.png";                   // 图片路径
+
+QString pic_path=":/new/prefix1/appimages/map.png";                   // 图片路径
 int HuiLu_flag;                     // 构成回路的标志
 int DFS_flag;                       // DFS 路径的绘制标志
 int Floyd_flag;                     // 两点之间的最短路径的绘制标志
@@ -104,22 +108,22 @@ void Scenicmanagement::Recover()             // 按钮信息重置
         ui->Btn_2_4->setText("最小代价修建道路");
         ui->Btn_2_5->setText("返回");
 
-        ui->Btn_1_1->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_1_2->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_1_3->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_1_4->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_1_5->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_1_6->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_2_1->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_2_2->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_2_3->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_2_4->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_2_5->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_3_1->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_3_2->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_3_3->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_3_4->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_3_5->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
+        ui->Btn_1_1->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_1_2->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_1_3->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_1_4->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_1_5->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_1_6->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_2_1->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_2_2->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_2_3->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_2_4->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_2_5->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_3_1->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_3_2->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_3_3->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_3_4->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_3_5->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
 
 
 
@@ -367,6 +371,8 @@ void Scenicmanagement::paintEvent(QPaintEvent*)      // 绘制函数
 
 void Scenicmanagement::mousePressEvent(QMouseEvent* e)   // 鼠标点击事件
 {
+    QString mapPath=QCoreApplication::applicationDirPath()+"/scenic.My_map";
+    mapPath.replace(QString("/"),QString("\\"));
     if (e->button() == Qt::LeftButton)              // 按左键
     {
         QPoint cur_click_pos = e->pos();            // e->pos(): 获取当前点击位置
@@ -409,7 +415,7 @@ void Scenicmanagement::mousePressEvent(QMouseEvent* e)   // 鼠标点击事件
             ui->Message_1->clear();
             ui->Message_1->addItem("目前有景点个数：" + QString::number(node_num));
             ui->Message_1->addItem("目前有道路的条数：" + QString::number(side_num));
-            savemap("F:/source/scenic_tourism_information_management_platform/scenic.My_map");
+            savemap(mapPath);
             ui->Message_1->addItem("如果还要继续添加, 请选择下一个点的位置。");
             function_num = 1;           // 功能号 1 保持不变(便于重复添加点)
             break;
@@ -473,7 +479,7 @@ void Scenicmanagement::mousePressEvent(QMouseEvent* e)   // 鼠标点击事件
                         line[side_num].dis = Count_distanse(point[ind_1], point[ind_2]);    // 道路的长度
                     }
                     ui->Message_1->clear();
-                    savemap("F:/source/scenic_tourism_information_management_platform/scenic.My_map");
+                    savemap(mapPath);
                     ui->Message_1->addItem("目前有景点个数：" + QString::number(node_num));
                     ui->Message_1->addItem("目前有道路的条数：" + QString::number(side_num));
                     ui->Message_1->addItem("如果还要继续添加道路, 请选择下一条道路的起点");
@@ -550,7 +556,7 @@ void Scenicmanagement::mousePressEvent(QMouseEvent* e)   // 鼠标点击事件
             ui->Message_1->addItem("目前有景点个数：" + QString::number(node_num));
             ui->Message_1->addItem("目前有道路的条数：" + QString::number(side_num));
             ui->Message_1->addItem("如果还要继续删除景点, 请选择下一个点的位置。");
-            savemap("F:/source/scenic_tourism_information_management_platform/scenic.My_map");
+            savemap(mapPath);
             function_num = 4;           // 功能号 4 保持不变(便于重复进行删除操作)
             break;
 
@@ -617,7 +623,7 @@ void Scenicmanagement::mousePressEvent(QMouseEvent* e)   // 鼠标点击事件
                     else
                     {
                         ui->Message_1->clear();
-                        savemap("F:/source/scenic_tourism_information_management_platform/scenic.My_map");
+                        savemap(mapPath);
                         ui->Message_1->addItem("目前有景点个数：" + QString::number(node_num));
                         ui->Message_1->addItem("目前有道路的条数：" + QString::number(side_num));
                         ui->Message_1->addItem("如果还要继续删除道路, 请选择下一条道路的起点");
@@ -855,7 +861,7 @@ void Scenicmanagement::on_Btn_1_1_clicked()       // 新增景点
     if(function_num != 1)
     {
         function_num = 1;
-        ui->Btn_1_1->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+        ui->Btn_1_1->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
         ui->Btn_1_1->setText("停止该操作");
         ui->Message_1->clear();
         ui->Message_1->addItem("请选择一个位置添加新景点");
@@ -876,7 +882,7 @@ void Scenicmanagement::on_Btn_1_2_clicked()      // 新增道路
     if(function_num != 2)
     {
         function_num = 2;
-        ui->Btn_1_2->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+        ui->Btn_1_2->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
         ui->Btn_1_2->setText("停止该操作");
         ui->Message_1->clear();
         ui->Message_1->addItem("请选择新增道路的起点");
@@ -896,7 +902,7 @@ void Scenicmanagement::on_Btn_1_3_clicked()      // 删除景点
     if(function_num != 4)
     {
         function_num = 4;
-        ui->Btn_1_3->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+        ui->Btn_1_3->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
         ui->Btn_1_3->setText("停止该操作");
         ui->Message_1->clear();
         ui->Message_1->addItem("请选择删除景点的位置");
@@ -916,7 +922,7 @@ void Scenicmanagement::on_Btn_1_4_clicked()      // 删除道路
     if(function_num != 5)
     {
         function_num = 5;
-        ui->Btn_1_4->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+        ui->Btn_1_4->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
         ui->Btn_1_4->setText("停止该操作");
         ui->Message_1->addItem("请选择需删除道路的起点");
     }
@@ -935,7 +941,7 @@ void Scenicmanagement::on_Btn_1_5_clicked()      // 编辑景点
     if(function_num != 7)
     {
         function_num = 7;
-        ui->Btn_1_5->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+        ui->Btn_1_5->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
         ui->Btn_1_5->setText("停止该操作");
         ui->Message_1->addItem("请选择需编辑的景点");
     }
@@ -955,7 +961,7 @@ void Scenicmanagement::on_Btn_1_6_clicked()      // 修改道路
     {
 
         function_num = 8;
-        ui->Btn_1_6->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+        ui->Btn_1_6->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
         ui->Btn_1_6->setText("停止该操作");
         ui->Message_1->addItem("请选择需要修改的道路的起点");
     }
@@ -1039,7 +1045,7 @@ void Scenicmanagement::on_Btn_2_1_clicked()      // 判断是否有回路
     if(function_num != 13)
     {
         function_num = 13;
-        ui->Btn_2_1->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+        ui->Btn_2_1->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
         ui->Btn_2_1->setText("停止该操作");
         int Degree[Node_MAX_NUM+1];
         if( Judge_HuiLu(Degree) )
@@ -1087,7 +1093,7 @@ void Scenicmanagement::on_Btn_2_2_clicked()      // 建立一张导游线路图(
     if(function_num != 10)
     {
         function_num = 10;
-        ui->Btn_2_2->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+        ui->Btn_2_2->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
         ui->Btn_2_2->setText("停止该操作");
         ui->Message_1->addItem("请选择旅游路线的起点");
     }
@@ -1106,7 +1112,7 @@ void Scenicmanagement::on_Btn_2_3_clicked()      // 求两点之间的最短路�
     if(function_num != 11)
     {
         function_num = 11;
-        ui->Btn_2_3->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+        ui->Btn_2_3->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
         ui->Btn_2_3->setText("停止该操作");
         Floyd();
         ui->Message_1->addItem("请选择起点");
@@ -1155,7 +1161,7 @@ void Scenicmanagement::on_Btn_2_4_clicked()      // 最小生成树(Kruskal)
     if(function_num != 14)
     {
         function_num = 14;
-        ui->Btn_2_4->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+        ui->Btn_2_4->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
         ui->Btn_2_4->setText("停止该操作");
         using namespace std;
         /* 初始化操作 */
@@ -1217,13 +1223,13 @@ void Scenicmanagement::on_Btn_3_1_clicked()          // 显示所有道路长
     {
         show_len_flag = true;
         ui->Btn_3_1->setText("隐藏所有道路的长");
-        ui->Btn_3_1->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+        ui->Btn_3_1->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
     }
     else
     {
         show_len_flag = false;
         ui->Btn_3_1->setText("显示所有道路的长");  // 每点一下切换一下状态
-        ui->Btn_3_1->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
+        ui->Btn_3_1->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
     }
     update();
 }
@@ -1235,7 +1241,9 @@ void Scenicmanagement::loadfile(QString filename)
     {
         int x, y;           // 用于读取征信数据
         string str;         // 用于读取字符串数据
-        ifstream in(filename.toStdString());
+        QTextCodec *code = QTextCodec::codecForName("GB2312");//解决中文路径问题
+        std::string file = code->fromUnicode(filename).data();
+        ifstream in(file);
         if(in.is_open())
         {
             in >> side_num >> node_num;
@@ -1271,19 +1279,22 @@ void Scenicmanagement::on_Btn_3_2_clicked()      // 加载地图
 
     All_flag_Clear();
     Recover();
-    ui->Btn_3_2->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+    ui->Btn_3_2->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
     using namespace std;
     QString filename = QFileDialog::getOpenFileName(this, "选择文件", "", "地图文件(*.My_map)");
     loadfile(filename);
-    ui->Btn_3_2->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
+    ui->Btn_3_2->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
 }
 
-void Scenicmanagement::savemap(QString filename)
+void Scenicmanagement::savemap(QString filename=QCoreApplication::applicationDirPath()+"/scenic.My_map")
 {
     using namespace std;
+    filename.replace(QString("/"),QString("\\"));
     if(filename != "")         // 判断文件地址是否输入成功
     {
-        ofstream out(filename.toStdString());               // 转换为标准字符串并进行保存
+        QTextCodec *code = QTextCodec::codecForName("GB2312");//解决中文路径问题
+        std::string file = code->fromUnicode(filename).data();
+        ofstream out(file);               // 转换为标准字符串并进行保存
         if(out.is_open())
         {
             out << side_num << ' ' << node_num << endl;     // 先输入道路的条数和景点个数
@@ -1313,7 +1324,7 @@ void Scenicmanagement::on_Btn_3_3_clicked()      // 保存地图
     using namespace std;
     All_flag_Clear();
     Recover();
-    ui->Btn_3_3->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+    ui->Btn_3_3->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
     QString filename = QFileDialog::getSaveFileName(this, "保存文件", "", "地图文件(*.My_map)");  // 文件扩展名为.My_map
     if(filename != "")         // 判断文件地址是否输入成功
     {
@@ -1341,19 +1352,19 @@ void Scenicmanagement::on_Btn_3_3_clicked()      // 保存地图
         else
             QMessageBox::information(this, "提示", "保存地图失败");
     }
-    ui->Btn_3_3->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
+    ui->Btn_3_3->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
 }
 
 void Scenicmanagement::on_Btn_3_4_clicked()      // 加载背景
 {
     All_flag_Clear();
     Recover();
-    ui->Btn_3_4->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+    ui->Btn_3_4->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
     QString temp = QFileDialog::getOpenFileName(this, "选择文件", "", "图像文件(*.jpg *.jpeg *.bmg *.png *.gif)");   // 设定只支持三种图片格式
     if(temp != "")
         pic_path = temp;     // 传入图片存储路径
     update();                // 重绘(背景图片就会被画上去)
-    ui->Btn_3_4->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
+    ui->Btn_3_4->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
 }
 
 void Scenicmanagement::on_Btn_3_5_clicked()      // 清除屏幕
@@ -1361,7 +1372,7 @@ void Scenicmanagement::on_Btn_3_5_clicked()      // 清除屏幕
     QMessageBox::StandardButton answer;
     All_flag_Clear();
     Recover();
-    ui->Btn_3_5->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+    ui->Btn_3_5->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
     answer = QMessageBox::question(this, "提示", "确认要清除屏幕吗？", QMessageBox::Yes | QMessageBox::No);
     if (answer == QMessageBox::Yes)
     {
@@ -1378,7 +1389,7 @@ void Scenicmanagement::on_Btn_3_5_clicked()      // 清除屏幕
         function_num = node_num = side_num = info_ind = 0;      // 功能号、景点数、道路数、景点标签的数组下标都清零
         ui->Message_1->clear();
     }
-    ui->Btn_3_5->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
+    ui->Btn_3_5->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
 }
 
 void Scenicmanagement::on_Btn_2_5_clicked()

@@ -1,18 +1,21 @@
 ﻿#include "recommend.h"
-#include "ui_recommend.h"
 #include "loadmap.h"
-#include <QtWidgets>        // 万能 Qt 头文件
+#include "ui_recommend.h"
+#include <QtWidgets>
 #include <vector>
 #include <fstream>
 #include <algorithm>
 #include <QSqlQuery>
+#include <QMessageBox>
 Recommend::Recommend(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Recommend)
 {
     ui->setupUi(this);
     this->setWindowTitle("景区推荐系统");
-    loadmap("F:/source/scenic_tourism_information_management_platform/scenic.My_map");
+    QString mapPath=QCoreApplication::applicationDirPath()+"/scenic.My_map";
+    mapPath.replace(QString("/"),QString("\\"));
+    loadmap(mapPath);
     QPalette palette(this->palette());
     palette.setColor(QPalette::Background, QColor("lightyellow"));
     this->setAutoFillBackground(true);
@@ -94,11 +97,12 @@ void Recommend::Recover()             // 按钮信息重置
         ui->Btn_2_4->setText("推荐线路2（经过所有景点）");
         ui->Btn_2_5->setText("返回");
 
-        ui->Btn_2_2->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_2_3->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_2_4->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_2_5->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
-        ui->Btn_3_1->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
+        ui->Btn_2_2->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_2_3->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_2_4->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_2_5->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_2_6->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
+        ui->Btn_3_1->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
 
 
 
@@ -830,7 +834,7 @@ void Recommend::on_Btn_2_2_clicked()      // 建立一张导游线路图(DFS)
     if(function_num2 != 10)
     {
         function_num2 = 10;
-        ui->Btn_2_2->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+        ui->Btn_2_2->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
         ui->Btn_2_2->setText("停止该操作");
         ui->Message_1->addItem("请选择旅游路线的起点");
     }
@@ -849,7 +853,7 @@ void Recommend::on_Btn_2_3_clicked()      // 求两点之间的最短路径(Floy
     if(function_num2 != 11)
     {
         function_num2 = 11;
-        ui->Btn_2_3->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+        ui->Btn_2_3->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
         ui->Btn_2_3->setText("停止该操作");
         Floyd();
         ui->Message_1->addItem("请选择起点");
@@ -898,7 +902,7 @@ void Recommend::on_Btn_2_4_clicked()      // 最小生成树(Kruskal)
     if(function_num2 != 14)
     {
         function_num2 = 14;
-        ui->Btn_2_4->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+        ui->Btn_2_4->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
         ui->Btn_2_4->setText("停止该操作");
         using namespace std;
         /* 初始化操作 */
@@ -960,13 +964,13 @@ void Recommend::on_Btn_3_1_clicked()          // 显示所有边长
     {
         show_len_flag2 = true;
         ui->Btn_3_1->setText("隐藏所有边的长");
-        ui->Btn_3_1->setStyleSheet("border-image: url(:/new/prefix1/btn_2.png);");
+        ui->Btn_3_1->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_2.png);");
     }
     else
     {
         show_len_flag2 = false;
         ui->Btn_3_1->setText("显示所有边的长");  // 每点一下切换一下状态
-        ui->Btn_3_1->setStyleSheet("border-image: url(:/new/prefix1/btn_1.png);");
+        ui->Btn_3_1->setStyleSheet("border-image: url(:/new/prefix1/appimages/btn_1.png);");
     }
     update();
 }
@@ -974,6 +978,8 @@ void Recommend::on_Btn_3_1_clicked()          // 显示所有边长
 
 void Recommend::loadmap(QString filename)
 {
+
+
     using namespace std;
     QSqlQuery query;
     if(filename != "")      // 判断文件地址是否输入成功
@@ -981,7 +987,9 @@ void Recommend::loadmap(QString filename)
         //qDebug()<<filename<<endl;
         int x, y;           // 用于读取征信数据
         string str;         // 用于读取字符串数据
-        ifstream in(filename.toStdString());
+        QTextCodec *code = QTextCodec::codecForName("GB2312");//解决中文路径问题
+        std::string file = code->fromUnicode(filename).data();
+        ifstream in(file);
         if(in.is_open())
         {
             in >> side_num2 >> node_num2;
